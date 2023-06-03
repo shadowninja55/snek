@@ -41,7 +41,7 @@ gridSize :: Int
 gridSize = 17
 
 tickRate :: Word32
-tickRate = 150
+tickRate = 100
 
 up, down, left, right :: V2 Int
 up = V2 0 -1
@@ -61,12 +61,12 @@ shutdown window = do
 onEvent :: SDL.EventPayload -> Game ()
 onEvent = \case
   SDL.WindowClosedEvent (SDL.WindowClosedEventData window) -> S.liftIO $ shutdown window
-  SDL.KeyboardEvent (SDL.KeyboardEventData (Just window) SDL.Pressed _ sym) -> case sym.keysymKeycode of
-    SDL.KeycodeEscape -> S.liftIO $ shutdown window
-    SDL.KeycodeW -> #dir %= (`changeDir` up)
-    SDL.KeycodeA -> #dir %= (`changeDir` left)
-    SDL.KeycodeS -> #dir %= (`changeDir` down)
-    SDL.KeycodeD -> #dir %= (`changeDir` right)
+  SDL.KeyboardEvent (SDL.KeyboardEventData (Just window) SDL.Pressed _ sym) -> case sym.keysymScancode of
+    SDL.ScancodeEscape -> S.liftIO $ shutdown window
+    SDL.ScancodeW -> #dir %= (`changeDir` up)
+    SDL.ScancodeA -> #dir %= (`changeDir` left)
+    SDL.ScancodeS -> #dir %= (`changeDir` down)
+    SDL.ScancodeD -> #dir %= (`changeDir` right)
     _ -> pure ()
   SDL.WindowResizedEvent (SDL.WindowResizedEventData _ (V2 x y)) -> 
     GL.viewport $= (GL.Position 0 0, GL.Size (fromIntegral x) (fromIntegral y))
